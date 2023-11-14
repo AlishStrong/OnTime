@@ -30,7 +30,13 @@
             "prefix": "app",
             "style": "kebab-case"
           }
-        ]
+        ],
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "caughtErrors": "none", "destructuredArrayIgnorePattern": "^_" }],
+        "indent": ["error", 2, { "SwitchCase": 1 }],
+        "semi": ["error", "always"],
+        "quotes": ["error", "single", { "avoidEscape": true }],
+        "eqeqeq": ["error", "smart"],
+        "object-curly-spacing": ["error", "always"]
       }
     },
     {
@@ -43,5 +49,11 @@
       ],
       "rules": {}
     }
-  ]
+  ],
+  "rules": {
+    "eol-last": ["error", "always"],
+    "linebreak-style": ["error", "unix"],
+    "no-trailing-spaces": "error",
+    "arrow-spacing": ["error", { "before": true, "after": true }]
+  }
 }
