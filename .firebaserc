@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "ontime-alisher"
+  },
+  "targets": {
+    "ontime-alisher": {
+      "hosting": {
+        "business": [
+          "ontime-business"
+        ]
+      }
+    }
+  },
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
