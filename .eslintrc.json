@@ -1,19 +1,16 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "projects/**/*"
-  ],
+  "ignorePatterns": ["projects/**/*"],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates",
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended",
+        "plugin:@ngrx/recommended-requiring-type-checking"
       ],
       "rules": {
         "@angular-eslint/directive-selector": [
@@ -32,18 +29,35 @@
             "style": "kebab-case"
           }
         ],
-        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "caughtErrors": "none", "destructuredArrayIgnorePattern": "^_" }],
-        "indent": ["error", 2, { "SwitchCase": 1 }],
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_",
+            "caughtErrors": "none",
+            "destructuredArrayIgnorePattern": "^_"
+          }
+        ],
+        "indent": [
+          "error",
+          2,
+          {
+            "SwitchCase": 1
+          }
+        ],
         "semi": ["error", "always"],
-        "quotes": ["error", "single", { "avoidEscape": true }],
+        "quotes": [
+          "error",
+          "single",
+          {
+            "avoidEscape": true
+          }
+        ],
         "eqeqeq": ["error", "smart"],
         "object-curly-spacing": ["error", "always"]
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
+      "files": ["*.html"],
       "extends": [
         "plugin:@angular-eslint/template/recommended",
         "plugin:@angular-eslint/template/accessibility",
@@ -63,6 +77,12 @@
     "eol-last": ["error", "always"],
     "linebreak-style": ["error", "unix"],
     "no-trailing-spaces": "error",
-    "arrow-spacing": ["error", { "before": true, "after": true }]
+    "arrow-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ]
   }
 }
