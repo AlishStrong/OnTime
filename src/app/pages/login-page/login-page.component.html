@@ -1,1 +1,105 @@
-<p>login-page works!</p>
+<div id="login+page" class="flex min-h-full flex-col justify-center py-12 text-sm font-medium sm:px-6 lg:px-8">
+  <!-- Authentication error banner -->
+  <div
+    id="auth-error"
+    class="mx-4 rounded-md bg-red-500 sm:mx-auto sm:w-full sm:max-w-md"
+    *ngIf="loginError$ | async as loginError"
+  >
+    <div class="flex items-center justify-between px-4 py-2">
+      <p class="truncate font-medium text-white">{{ loginError }}</p>
+      <button
+        type="button"
+        class="-mr-1 flex rounded-md p-2 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2"
+        (click)="closeAuthErrorNotification()"
+      >
+        <span class="sr-only">Dismiss authentication error</span>
+        <!-- Heroicon name: outline/x -->
+        <svg
+          class="h-6 w-6 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Log in to OnTime Business</h2>
+  </div>
+
+  <div class="mt-8 text-gray-700 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="space-y-6 bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
+      <!-- Email-password authentication -->
+      <form class="space-y-6" [formGroup]="loginForm" (ngSubmit)="login()">
+        <div>
+          <label for="email" class="block">Email*</label>
+          <div class="mt-1">
+            <input
+              id="email"
+              formControlName="email"
+              type="email"
+              autocomplete="email"
+              required
+              class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+              [ngClass]="{
+                'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
+                  emailInvalid
+              }"
+            />
+            <span
+              class="ml-2 mt-2 block text-red-500"
+              *ngIf="emailInvalid && loginForm.get('email')?.errors?.['required']"
+            >
+              Email is required!
+            </span>
+            <span
+              class="ml-2 mt-2 block text-red-500"
+              *ngIf="emailInvalid && loginForm.get('email')?.errors?.['email']"
+            >
+              Must be a valid email address!
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <label for="password" class="block">Password*</label>
+          <div class="mt-1">
+            <input
+              id="password"
+              formControlName="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+              [ngClass]="{
+                'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
+                  passwordInvalid
+              }"
+            />
+            <span
+              class="ml-2 mt-2 block text-red-500"
+              *ngIf="passwordInvalid && loginForm.get('password')?.errors?.['required']"
+            >
+              Password is required!
+            </span>
+          </div>
+        </div>
+        <div>
+          <button
+            type="submit"
+            [disabled]="!loginForm.valid"
+            class="flex w-full justify-center rounded-md bg-orange-500 px-4 py-2 text-white shadow-sm hover:bg-orange-400 disabled:bg-orange-300"
+          >
+            Log in
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { UserActions } from 'src/app/ngrx-store/user/user.actions';
+import { selectLoginError } from 'src/app/ngrx-store/user/user.selectors';
 
 @Component({
   selector: 'app-login-page',
@@ -6,5 +11,42 @@ import { Component } from '@angular/core';
   styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent {
+  loginError$ = this.store.select(selectLoginError);
 
+  loginForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
+    rememberMe: false
+  });
+
+  get emailInvalid() {
+    return (
+      this.loginForm.get('email')?.touched ||
+      (this.loginForm.get('email')?.dirty && !this.loginForm.get('email')?.valid)
+    );
+  }
+
+  get passwordInvalid() {
+    return (
+      this.loginForm.get('password')?.touched ||
+      (this.loginForm.get('password')?.dirty && !this.loginForm.get('password')?.valid)
+    );
+  }
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private store: Store
+  ) {}
+
+  login(): void {
+    const { email, password } = this.loginForm.value;
+    if (email && password) {
+      this.store.dispatch(UserActions.loginWithUsernameAndPassword({ username: email, password }));
+    }
+  }
+
+  closeAuthErrorNotification() {
+    this.store.dispatch(UserActions.clearLoginError());
+  }
 }
