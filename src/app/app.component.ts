@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { selectShowLogin } from './ngrx-store/view/view.selectors';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ontime';
+  constructor(private store: Store) {}
+
+  isLoggedIn$ = this.store.select(selectShowLogin);
 }

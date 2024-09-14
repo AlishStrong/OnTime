@@ -1,4 +1,4 @@
-<header class="m-3 flex items-center gap-3 p-3" *ngIf="showNavbar$ | async">
+<header class="m-3 flex items-center gap-3 p-3" *ngIf="showNavbar$ | async" [ngClass]="{ 'w-64': uid$ | async }">
   <a
     *ngIf="showLogin$ | async"
     routerLink="/login"
