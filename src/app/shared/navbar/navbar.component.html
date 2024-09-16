@@ -5,6 +5,12 @@
     class="cursor-pointer rounded-md bg-orange-500 px-3 pb-2 pt-1 font-semibold text-white hover:bg-orange-400"
     >log in</a
   >
+  <a
+    *ngIf="showSignup$ | async"
+    routerLink="/signup"
+    class="cursor-pointer rounded-md bg-orange-500 px-3 pb-2 pt-1 font-semibold text-white hover:bg-orange-400"
+    >sign up</a
+  >
   <button
     *ngIf="uid$ | async"
     (click)="logout()"

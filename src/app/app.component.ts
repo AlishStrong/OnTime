@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectShowLogin } from './ngrx-store/view/view.selectors';
+import { selectShowNavbar } from './ngrx-store/view/view.selectors';
+import { selectUID } from './ngrx-store/user/user.selectors';
 
 @Component({
   selector: 'app-root',
@@ -10,5 +11,6 @@ import { selectShowLogin } from './ngrx-store/view/view.selectors';
 export class AppComponent {
   constructor(private store: Store) {}
 
-  isLoggedIn$ = this.store.select(selectShowLogin);
+  isLoggedIn$ = this.store.select(selectUID);
+  whiteBackground$ = this.store.select(selectShowNavbar);
 }

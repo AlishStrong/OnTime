@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut, UserCredential } from '@angular/fire/auth';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+  User,
+  UserCredential
+} from '@angular/fire/auth';
 import { from, Observable } from 'rxjs';
 
 @Injectable({
@@ -7,6 +15,15 @@ import { from, Observable } from 'rxjs';
 })
 export class AuthService {
   constructor(private auth: Auth) {}
+
+  createUserWithEmailAndPassword = (email: string, password: string): Observable<UserCredential> => {
+    return from(createUserWithEmailAndPassword(this.auth, email, password));
+  };
+
+  updateUser = (user: User, profileData: { displayName?: string; photoURL?: string }): Observable<User> => {
+    const authPromise = updateProfile(user, profileData).then(() => user);
+    return from(authPromise);
+  };
 
   loginWithUsernameAndPassword = (
     username: string,

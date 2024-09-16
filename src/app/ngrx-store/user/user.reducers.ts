@@ -4,14 +4,14 @@ import { createReducer, on } from '@ngrx/store';
 import { UserActions } from './user.actions';
 
 export interface UserState extends Pick<UserInfo, 'displayName' | 'email' | 'uid'> {
-  loginError: FirebaseError['code'];
+  authError: FirebaseError['code'];
 }
 
 const initialUserState: UserState = {
   displayName: null,
   email: null,
   uid: '',
-  loginError: ''
+  authError: ''
 };
 
 export const UserReducer = createReducer(
@@ -20,17 +20,17 @@ export const UserReducer = createReducer(
     UserActions.loginWithUsernameAndPassword,
     (state, _): UserState => ({
       ...state,
-      loginError: ''
+      authError: ''
     })
   ),
   on(
-    UserActions.loginError,
-    (state, { loginError }): UserState => ({
+    UserActions.authError,
+    (state, { authError }): UserState => ({
       ...state,
       displayName: null,
       email: null,
       uid: '',
-      loginError
+      authError
     })
   ),
   on(
@@ -39,7 +39,7 @@ export const UserReducer = createReducer(
       displayName: null,
       email: null,
       uid: '',
-      loginError: ''
+      authError: ''
     })
   ),
   on(
@@ -49,14 +49,14 @@ export const UserReducer = createReducer(
       displayName,
       email,
       uid,
-      loginError: ''
+      authError: ''
     })
   ),
   on(
-    UserActions.clearLoginError,
+    UserActions.clearAuthError,
     (state): UserState => ({
       ...state,
-      loginError: ''
+      authError: ''
     })
   )
 );

@@ -1,6 +1,6 @@
-<div class="mx-auto flex min-h-screen" [ngClass]="(isLoggedIn$ | async) ? 'max-w-5xl flex-col' : 'flex-row'">
+<div class="mx-auto flex min-h-screen" [ngClass]="(isLoggedIn$ | async) ? 'flex-row' : 'max-w-5xl flex-col'">
   <app-navbar></app-navbar>
-  <main class="flex-1 bg-white">
+  <main class="flex-1" [ngClass]="{ 'bg-white': whiteBackground$ | async }">
     <router-outlet></router-outlet>
   </main>
 </div>

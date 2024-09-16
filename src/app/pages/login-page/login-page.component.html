@@ -1,4 +1,4 @@
-<div id="login+page" class="flex min-h-full flex-col justify-center py-12 text-sm font-medium sm:px-6 lg:px-8">
+<div id="login-page" class="flex min-h-full flex-col justify-center py-12 text-sm font-medium sm:px-6 lg:px-8">
   <!-- Authentication error banner -->
   <div
     id="auth-error"
@@ -100,6 +100,18 @@
           </button>
         </div>
       </form>
+      <div>
+        <p class="text-gray-700">
+          Don't have an account?
+          <a class="font-semibold text-gray-900 hover:font-extrabold hover:text-gray-700" [routerLink]="['/signup']"
+            >Sign up</a
+          >
+          or
+          <button class="font-semibold text-gray-900 hover:font-extrabold hover:text-gray-700" (click)="cancel()">
+            Cancel log in
+          </button>
+        </p>
+      </div>
     </div>
   </div>
 </div>

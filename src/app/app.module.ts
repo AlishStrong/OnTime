@@ -18,9 +18,16 @@ import { firebaseConfig } from 'src/environments/firebaseConfig';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserReducer } from './ngrx-store/user/user.reducers';
 import { UserEffects } from './ngrx-store/user/user.effects';
+import { BusinessSignupComponent } from './pages/business-signup/business-signup.component';
 
 @NgModule({
-  declarations: [AppComponent, LandingPageComponent, LoginPageComponent, BusinessHomePageComponent],
+  declarations: [
+    AppComponent,
+    LandingPageComponent,
+    LoginPageComponent,
+    BusinessHomePageComponent,
+    BusinessSignupComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
