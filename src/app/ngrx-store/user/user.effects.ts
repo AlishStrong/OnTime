@@ -96,6 +96,7 @@ export class UserEffects implements OnInitEffects {
         return this.authService.createUserWithEmailAndPassword(email, password).pipe(
           map(uc => uc.user),
           switchMap(user => this.authService.updateUser(user, { displayName: `${firstname} ${lastname}` })),
+          switchMap(user => this.authService.sendEmailVerification(user)),
           map(user =>
             UserActions.setUserData({
               displayName,

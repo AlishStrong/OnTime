@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -22,6 +23,11 @@ export class AuthService {
 
   updateUser = (user: User, profileData: { displayName?: string; photoURL?: string }): Observable<User> => {
     const authPromise = updateProfile(user, profileData).then(() => user);
+    return from(authPromise);
+  };
+
+  sendEmailVerification = (user: User): Observable<User> => {
+    const authPromise = sendEmailVerification(user).then(() => user);
     return from(authPromise);
   };
 
