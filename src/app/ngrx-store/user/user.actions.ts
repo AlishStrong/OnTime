@@ -6,7 +6,13 @@ export const UserActions = createActionGroup({
     'Login with Username and Password': props<{ username: string; password: string }>(),
     'Auth Error': props<{ authError: string }>(),
     Logout: emptyProps(),
-    'Set user data': props<{ displayName: string; email: string; uid: string }>(),
+    'Set user data': props<{
+      displayName: string;
+      email: string;
+      uid: string;
+      emailVerified: boolean;
+      roles: string[];
+    }>(),
     'Clear auth error': emptyProps(),
     'Sign up': props<{ firstname: string; lastname: string; email: string; password: string }>()
   }

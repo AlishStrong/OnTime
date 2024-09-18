@@ -5,9 +5,10 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { AuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { BusinessHomePageComponent } from './pages/business-home-page/business-home-page.component';
 import { BusinessSignupComponent } from './pages/business-signup/business-signup.component';
+import { CompaniesPageComponent } from './pages/companies-page/companies-page.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
-const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
+const redirectLoggedInToHome = () => redirectLoggedInTo(['business-home']);
 
 const routes: Routes = [
   {
@@ -29,8 +30,14 @@ const routes: Routes = [
     data: { authGuardPipe: redirectLoggedInToHome }
   },
   {
-    path: 'home',
+    path: 'business-home',
     component: BusinessHomePageComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin }
+  },
+  {
+    path: 'companies',
+    component: CompaniesPageComponent,
     canActivate: [AuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin }
   },

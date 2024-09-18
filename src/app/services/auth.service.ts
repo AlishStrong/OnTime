@@ -34,20 +34,14 @@ export class AuthService {
   loginWithUsernameAndPassword = (
     username: string,
     password: string
-  ): Observable<{ displayName: string; email: string; uid: string }> => {
-    const authPromise = signInWithEmailAndPassword(this.auth, username, password)
-      .then(uc => {
-        uc.user.getIdTokenResult().then(t => {
-          console.log('User Credentials ID token claims, i.e. ROLES', t.claims['roles']);
-        });
-
-        return uc;
-      })
-      .then((uc: UserCredential) => ({
-        displayName: uc.user.displayName || '',
-        email: uc.user.email || '',
-        uid: uc.user.uid || ''
-      }));
+  ): Observable<{ displayName: string; email: string; uid: string; emailVerified: boolean; roles: string[] }> => {
+    const authPromise = signInWithEmailAndPassword(this.auth, username, password).then(async (uc: UserCredential) => ({
+      displayName: uc.user.displayName || '',
+      email: uc.user.email || '',
+      uid: uc.user.uid || '',
+      emailVerified: uc.user.emailVerified,
+      roles: ((await uc.user.getIdTokenResult()).claims['roles'] || []) as string[]
+    }));
     return from(authPromise);
   };
 

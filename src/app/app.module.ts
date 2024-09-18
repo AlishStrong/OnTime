@@ -19,6 +19,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserReducer } from './ngrx-store/user/user.reducers';
 import { UserEffects } from './ngrx-store/user/user.effects';
 import { BusinessSignupComponent } from './pages/business-signup/business-signup.component';
+import { CompaniesPageComponent } from './pages/companies-page/companies-page.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { BusinessSignupComponent } from './pages/business-signup/business-signup
     LandingPageComponent,
     LoginPageComponent,
     BusinessHomePageComponent,
-    BusinessSignupComponent
+    BusinessSignupComponent,
+    CompaniesPageComponent
   ],
   imports: [
     BrowserModule,

@@ -1,21 +1,36 @@
-<header class="m-3 flex items-center gap-3 p-3" *ngIf="showNavbar$ | async" [ngClass]="{ 'w-64': uid$ | async }">
-  <a
-    *ngIf="showLogin$ | async"
-    routerLink="/login"
-    class="cursor-pointer rounded-md bg-orange-500 px-3 pb-2 pt-1 font-semibold text-white hover:bg-orange-400"
-    >log in</a
-  >
-  <a
-    *ngIf="showSignup$ | async"
-    routerLink="/signup"
-    class="cursor-pointer rounded-md bg-orange-500 px-3 pb-2 pt-1 font-semibold text-white hover:bg-orange-400"
-    >sign up</a
-  >
-  <button
+<header class="m-3 flex p-3" *ngIf="showNavbar$ | async" [ngClass]="{ 'w-64 flex-col justify-between': uid$ | async }">
+  <div
+    id="business-buttons"
+    class="flex items-center gap-3"
     *ngIf="uid$ | async"
-    (click)="logout()"
-    class="cursor-pointer rounded-md bg-orange-500 px-3 pb-2 pt-1 font-semibold text-white hover:bg-orange-400"
+    [ngClass]="{ 'flex-col': uid$ | async }"
   >
-    log out
-  </button>
+    <a
+      [routerLink]="['/companies']"
+      class="cursor-pointer rounded-md bg-orange-500 px-3 pb-2 pt-1 font-semibold text-white hover:bg-orange-400"
+      >companies</a
+    >
+  </div>
+
+  <div id="auth-buttons" class="flex items-center gap-3" [ngClass]="{ 'flex-col': uid$ | async }">
+    <a
+      *ngIf="showLogin$ | async"
+      [routerLink]="['/login']"
+      class="cursor-pointer rounded-md bg-orange-500 px-3 pb-2 pt-1 font-semibold text-white hover:bg-orange-400"
+      >log in</a
+    >
+    <a
+      *ngIf="showSignup$ | async"
+      [routerLink]="['/signup']"
+      class="cursor-pointer rounded-md bg-orange-500 px-3 pb-2 pt-1 font-semibold text-white hover:bg-orange-400"
+      >sign up</a
+    >
+    <button
+      *ngIf="uid$ | async"
+      (click)="logout()"
+      class="cursor-pointer rounded-md bg-orange-500 px-3 pb-2 pt-1 font-semibold text-white hover:bg-orange-400"
+    >
+      log out
+    </button>
+  </div>
 </header>

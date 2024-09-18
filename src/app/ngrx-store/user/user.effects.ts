@@ -21,8 +21,10 @@ export class UserEffects implements OnInitEffects {
     const displayName = localStorage.getItem('displayName');
     const email = localStorage.getItem('email');
     const uid = localStorage.getItem('uid');
+    const emailVerified = JSON.parse(localStorage.getItem('emailVerified') || 'false');
+    const roles = JSON.parse(localStorage.getItem('roles') || '[]');
     if (displayName && email && uid) {
-      return UserActions.setUserData({ displayName, email, uid });
+      return UserActions.setUserData({ displayName, email, uid, emailVerified, roles });
     } else {
       return UserActions.logout();
     }
@@ -56,11 +58,13 @@ export class UserEffects implements OnInitEffects {
     () => {
       return this.actions$.pipe(
         ofType(UserActions.setUserData),
-        tap(({ displayName, email, uid }) => {
+        tap(({ displayName, email, uid, emailVerified, roles }) => {
           localStorage.setItem('displayName', displayName);
           localStorage.setItem('email', email);
           localStorage.setItem('uid', uid);
-          this.router.navigate(['/home']);
+          localStorage.setItem('emailVerified', JSON.stringify(emailVerified));
+          localStorage.setItem('roles', JSON.stringify(roles));
+          this.router.navigate(['/business-home']);
         })
       );
     },
@@ -101,7 +105,9 @@ export class UserEffects implements OnInitEffects {
             UserActions.setUserData({
               displayName,
               email,
-              uid: user.uid
+              uid: user.uid,
+              emailVerified: user.emailVerified,
+              roles: []
             })
           )
         );

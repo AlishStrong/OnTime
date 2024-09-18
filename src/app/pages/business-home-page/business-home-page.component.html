@@ -1,1 +1,7 @@
-<p *ngIf="username$ | async as username">Welocme to OnTime, {{ username }}</p>
+<div *ngIf="user$ | async as user">
+  <p>Welcome to OnTime, {{ user.displayName }}</p>
+  <p>email -- {{ user.email }}</p>
+  <p>UID -- {{ user.uid }}</p>
+  <p>is email verified -- {{ user.emailVerified }}</p>
+  <p>roles -- {{ user.roles }}</p>
+</div>

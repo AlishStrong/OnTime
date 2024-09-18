@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectUsername } from 'src/app/ngrx-store/user/user.selectors';
+import { selectUserState } from 'src/app/ngrx-store/user/user.selectors';
 
 @Component({
   selector: 'app-business-home-page',
@@ -8,7 +8,7 @@ import { selectUsername } from 'src/app/ngrx-store/user/user.selectors';
   styleUrls: ['./business-home-page.component.css']
 })
 export class BusinessHomePageComponent {
-  username$ = this.store.select(selectUsername);
+  user$ = this.store.select(selectUserState);
 
   constructor(private store: Store) {}
 }

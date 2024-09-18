@@ -4,6 +4,8 @@ import { createReducer, on } from '@ngrx/store';
 import { UserActions } from './user.actions';
 
 export interface UserState extends Pick<UserInfo, 'displayName' | 'email' | 'uid'> {
+  emailVerified: boolean;
+  roles: string[];
   authError: FirebaseError['code'];
 }
 
@@ -11,6 +13,8 @@ const initialUserState: UserState = {
   displayName: null,
   email: null,
   uid: '',
+  emailVerified: false,
+  roles: [],
   authError: ''
 };
 
@@ -30,6 +34,8 @@ export const UserReducer = createReducer(
       displayName: null,
       email: null,
       uid: '',
+      emailVerified: false,
+      roles: [],
       authError
     })
   ),
@@ -39,16 +45,20 @@ export const UserReducer = createReducer(
       displayName: null,
       email: null,
       uid: '',
+      emailVerified: false,
+      roles: [],
       authError: ''
     })
   ),
   on(
     UserActions.setUserData,
-    (state, { displayName, email, uid }): UserState => ({
+    (state, { displayName, email, uid, emailVerified, roles }): UserState => ({
       ...state,
       displayName,
       email,
       uid,
+      emailVerified,
+      roles,
       authError: ''
     })
   ),
