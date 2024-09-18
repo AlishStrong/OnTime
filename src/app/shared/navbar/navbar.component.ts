@@ -7,9 +7,7 @@ import { selectShowLogin, selectShowNavbar, selectShowSignup } from 'src/app/ngr
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css'],
-  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
-  host: { class: 'flex' }
+  styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
   showNavbar$ = this.store.select(selectShowNavbar);

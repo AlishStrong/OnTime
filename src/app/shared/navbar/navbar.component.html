@@ -1,4 +1,8 @@
-<header class="m-3 flex p-3" *ngIf="showNavbar$ | async" [ngClass]="{ 'w-64 flex-col justify-between': uid$ | async }">
+<header
+  class="m-3 flex grow p-3"
+  *ngIf="showNavbar$ | async"
+  [ngClass]="{ 'justify-between lg:w-64 lg:flex-col': uid$ | async }"
+>
   <div
     id="business-buttons"
     class="flex items-center gap-3"

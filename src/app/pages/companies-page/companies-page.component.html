@@ -1,1 +1,159 @@
-<p>companies-page works!</p>
+<div id="companies-page" class="mx-auto max-w-5xl">
+  <!-- add company button -->
+  <div class="flex flex-col items-center gap-3 sm:mx-auto sm:w-full sm:max-w-md" *ngIf="addCompany$ | async">
+    <h2 class="mt-6 text-center text-2xl font-semibold text-gray-900">No company added at the moment</h2>
+    <button
+      class="text-1xl rounded-md bg-orange-500 px-4 py-2 font-semibold text-white shadow-sm hover:bg-orange-400"
+      (click)="addCompany()"
+    >
+      Add Company
+    </button>
+  </div>
+
+  <!-- company form -->
+  <form class="mx-auto" *ngIf="(addCompany$ | async) === false">
+    <h2 class="text-2xl font-semibold text-gray-900">Add a new Company</h2>
+    <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
+
+    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-2">
+      <div class="space-y-1">
+        <h3 class="font-semibold text-gray-900">Company Legal Name</h3>
+        <p class="text-gray-500">As stated in trade register</p>
+      </div>
+      <div>
+        <input
+          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          id="legalname"
+          name="legalname"
+        />
+      </div>
+    </div>
+    <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
+
+    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-2">
+      <div class="space-y-1">
+        <h3 class="font-semibold text-gray-900">Business ID</h3>
+        <p class="text-gray-500">As stated in trade register</p>
+      </div>
+      <div>
+        <input
+          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          id="businessid"
+          name="businessid"
+        />
+      </div>
+    </div>
+    <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
+
+    <div class="grid gap-x-8 gap-y-2 sm:grid-cols-2">
+      <div class="space-y-1">
+        <h3 class="font-semibold text-gray-900">Street Address</h3>
+        <p class="text-gray-500">As stated in trade register</p>
+      </div>
+      <div class="grid grid-cols-2 gap-6">
+        <div class="relative col-span-2">
+          <label for="streetname" class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium text-gray-900"
+            >Street and house number</label
+          >
+          <input
+            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 leading-6 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+            id="streetname"
+            name="streetname"
+          />
+        </div>
+
+        <div class="relative">
+          <label for="city" class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium text-gray-900"
+            >City</label
+          >
+          <input
+            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 leading-6 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+            id="city"
+            name="city"
+          />
+        </div>
+
+        <div class="relative">
+          <label for="postalnumber" class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium text-gray-900"
+            >Postal number</label
+          >
+          <input
+            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 leading-6 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+            id="postalnumber"
+            name="postalnumber"
+          />
+        </div>
+
+        <div class="relative col-span-2">
+          <label for="country" class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium text-gray-900"
+            >Country</label
+          >
+          <input
+            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 leading-6 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+            id="country"
+            name="country"
+          />
+        </div>
+
+        <div class="col-span-2 flex items-center gap-3">
+          <label for="identicalstreets" class="font-medium text-gray-900"
+            >Street Address is identical to Postal Address</label
+          >
+          <input
+            id="identicalstreets"
+            name="identicalstreets"
+            type="checkbox"
+            checked
+            class="h-6 w-6 rounded-md border-gray-300 text-green-600 focus:ring-green-600"
+          />
+        </div>
+      </div>
+    </div>
+    <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
+
+    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-2">
+      <div class="space-y-1">
+        <h3 class="font-semibold text-gray-900">Company Name</h3>
+        <p class="text-gray-500">As used in marketing materials</p>
+      </div>
+      <div>
+        <input
+          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          id="name"
+          name="name"
+        />
+      </div>
+    </div>
+    <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
+
+    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-2">
+      <div class="space-y-1">
+        <h3 class="font-semibold text-gray-900">Email</h3>
+        <p class="text-gray-500">For customer service</p>
+      </div>
+      <div>
+        <input
+          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          id="email"
+          name="email"
+        />
+      </div>
+    </div>
+    <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
+
+    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-2">
+      <div class="space-y-1">
+        <h3 class="font-semibold text-gray-900">Phone number</h3>
+        <p class="text-gray-500">For customer service</p>
+      </div>
+      <div>
+        <input
+          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          id="phone"
+          name="phone"
+        />
+      </div>
+    </div>
+    <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
+  </form>
+</div>

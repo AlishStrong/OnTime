@@ -34,9 +34,9 @@
   </div>
 
   <div class="mt-8 text-gray-700 sm:mx-auto sm:w-full sm:max-w-md">
-    <div class="space-y-6 bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
+    <div class="space-y-6 rounded-lg bg-white px-4 py-8 shadow sm:px-10">
       <!-- Email-password authentication -->
-      <form class="space-y-6" [formGroup]="loginForm" (ngSubmit)="login()">
+      <form id="login-form" class="space-y-6" [formGroup]="loginForm" (ngSubmit)="login()">
         <div>
           <label for="email" class="block">Email*</label>
           <div class="mt-1">

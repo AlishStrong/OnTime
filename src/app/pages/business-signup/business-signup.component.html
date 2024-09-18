@@ -34,8 +34,8 @@
   </div>
 
   <div class="mt-8 text-gray-700 sm:mx-auto sm:w-full sm:max-w-md">
-    <div class="space-y-6 bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
-      <form class="space-y-6" [formGroup]="signupForm" (ngSubmit)="signup()">
+    <div class="space-y-6 rounded-lg bg-white px-4 py-8 shadow sm:px-10">
+      <form id="signup-form" class="space-y-6" [formGroup]="signupForm" (ngSubmit)="signup()">
         <div>
           <label for="firstname" class="block">First Name* (as in your passport)</label>
           <div class="mt-1">
