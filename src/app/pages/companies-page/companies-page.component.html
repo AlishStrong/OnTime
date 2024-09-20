@@ -11,149 +11,254 @@
   </div>
 
   <!-- company form -->
-  <form class="mx-auto" *ngIf="(addCompany$ | async) === false">
+  <form
+    id="add-company-form"
+    [formGroup]="addCompanyForm"
+    (ngSubmit)="addCompany()"
+    class="mx-auto"
+    *ngIf="(addCompany$ | async) === false"
+  >
     <h2 class="text-2xl font-semibold text-gray-900">Add a new Company</h2>
     <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
 
-    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-2">
-      <div class="space-y-1">
+    <div class="grid gap-x-8 gap-y-2 sm:grid-cols-5 lg:grid-cols-2">
+      <div class="space-y-1 sm:col-span-2 lg:col-span-1">
+        <h3 class="font-semibold text-gray-900">Country</h3>
+        <p class="text-gray-500">Where your company is registered and where OnTime operates</p>
+      </div>
+      <div class="sm:col-span-3 lg:col-span-1">
+        <select
+          [ngClass]="{
+            'invalid:border-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500': invalidControl('country')
+          }"
+          required
+          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          formControlName="country"
+          id="country"
+        >
+          <option *ngFor="let country of countries" [ngValue]="country">{{ country }}</option>
+        </select>
+        <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('country', 'required')">
+          Country is required!
+        </span>
+      </div>
+    </div>
+    <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
+
+    <div class="grid gap-x-8 gap-y-2 sm:grid-cols-5 lg:grid-cols-2">
+      <div class="space-y-1 sm:col-span-2 lg:col-span-1">
         <h3 class="font-semibold text-gray-900">Company Legal Name</h3>
         <p class="text-gray-500">As stated in trade register</p>
       </div>
-      <div>
+      <div class="sm:col-span-3 lg:col-span-1">
         <input
           class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
-          id="legalname"
-          name="legalname"
+          id="legal-name"
+          formControlName="legalName"
+          type="text"
+          required
+          [ngClass]="{
+            'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
+              invalidControl('legalName')
+          }"
         />
+        <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('legalName', 'required')">
+          Legal Name is required!
+        </span>
       </div>
     </div>
     <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
 
-    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-2">
-      <div class="space-y-1">
+    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-5 lg:grid-cols-2">
+      <div class="space-y-1 sm:col-span-2 lg:col-span-1">
         <h3 class="font-semibold text-gray-900">Business ID</h3>
         <p class="text-gray-500">As stated in trade register</p>
       </div>
-      <div>
+      <div class="sm:col-span-3 lg:col-span-1">
         <input
           class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
-          id="businessid"
-          name="businessid"
+          id="business-id"
+          formControlName="businessId"
+          type="text"
+          required
+          [ngClass]="{
+            'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
+              invalidControl('businessId')
+          }"
         />
+        <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('businessId', 'required')">
+          Business ID is required!
+        </span>
       </div>
     </div>
     <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
 
-    <div class="grid gap-x-8 gap-y-2 sm:grid-cols-2">
-      <div class="space-y-1">
+    <div class="grid gap-x-8 gap-y-2 sm:grid-cols-5 lg:grid-cols-2">
+      <div class="space-y-1 sm:col-span-2 lg:col-span-1">
         <h3 class="font-semibold text-gray-900">Street Address</h3>
         <p class="text-gray-500">As stated in trade register</p>
       </div>
-      <div class="grid grid-cols-2 gap-6">
+      <div
+        id="add-company-street-address"
+        formGroupName="streetAddress"
+        class="grid grid-cols-2 gap-6 sm:col-span-3 lg:col-span-1"
+      >
         <div class="relative col-span-2">
-          <label for="streetname" class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium text-gray-900"
+          <label
+            for="street-name"
+            class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium"
+            [ngClass]="invalidControl('streetAddress.streetName', 'any') ? 'text-red-500' : 'text-gray-900'"
             >Street and house number</label
           >
           <input
-            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 leading-6 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
-            id="streetname"
-            name="streetname"
+            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+            id="street-name"
+            formControlName="streetName"
+            type="text"
+            required
+            [ngClass]="{
+              'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
+                invalidControl('streetAddress.streetName')
+            }"
           />
+          <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('streetAddress.streetName', 'required')">
+            Street and house number are required!
+          </span>
         </div>
 
         <div class="relative">
-          <label for="city" class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium text-gray-900"
+          <label
+            for="city"
+            class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium"
+            [ngClass]="invalidControl('streetAddress.city', 'any') ? 'text-red-500' : 'text-gray-900'"
             >City</label
           >
           <input
-            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 leading-6 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
             id="city"
-            name="city"
+            formControlName="city"
+            required
+            [ngClass]="{
+              'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
+                invalidControl('streetAddress.city')
+            }"
           />
+          <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('streetAddress.city', 'required')">
+            City is required!
+          </span>
         </div>
 
         <div class="relative">
-          <label for="postalnumber" class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium text-gray-900"
+          <label
+            for="postal-number"
+            class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium"
+            [ngClass]="invalidControl('streetAddress.postalNumber', 'any') ? 'text-red-500' : 'text-gray-900'"
             >Postal number</label
           >
           <input
-            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 leading-6 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
-            id="postalnumber"
-            name="postalnumber"
+            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+            id="postal-number"
+            formControlName="postalNumber"
+            required
+            [ngClass]="{
+              'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
+                invalidControl('streetAddress.postalNumber')
+            }"
           />
-        </div>
-
-        <div class="relative col-span-2">
-          <label for="country" class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium text-gray-900"
-            >Country</label
-          >
-          <input
-            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 leading-6 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
-            id="country"
-            name="country"
-          />
-        </div>
-
-        <div class="col-span-2 flex items-center gap-3">
-          <label for="identicalstreets" class="font-medium text-gray-900"
-            >Street Address is identical to Postal Address</label
-          >
-          <input
-            id="identicalstreets"
-            name="identicalstreets"
-            type="checkbox"
-            checked
-            class="h-6 w-6 rounded-md border-gray-300 text-green-600 focus:ring-green-600"
-          />
+          <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('streetAddress.postalNumber', 'required')">
+            Postal number is required!
+          </span>
         </div>
       </div>
     </div>
     <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
 
-    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-2">
-      <div class="space-y-1">
+    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-5 lg:grid-cols-2">
+      <div class="space-y-1 sm:col-span-2 lg:col-span-1">
         <h3 class="font-semibold text-gray-900">Company Name</h3>
         <p class="text-gray-500">As used in marketing materials</p>
       </div>
-      <div>
+      <div class="sm:col-span-3 lg:col-span-1">
         <input
           class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
           id="name"
-          name="name"
+          formControlName="name"
+          required
+          [ngClass]="{
+            'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
+              invalidControl('name')
+          }"
         />
+        <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('name', 'required')">
+          Company Name is required!
+        </span>
       </div>
     </div>
     <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
 
-    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-2">
-      <div class="space-y-1">
+    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-5 lg:grid-cols-2">
+      <div class="space-y-1 sm:col-span-2 lg:col-span-1">
         <h3 class="font-semibold text-gray-900">Email</h3>
         <p class="text-gray-500">For customer service</p>
       </div>
-      <div>
+      <div class="sm:col-span-3 lg:col-span-1">
         <input
           class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
           id="email"
-          name="email"
+          formControlName="email"
+          required
+          [ngClass]="{
+            'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
+              invalidControl('email')
+          }"
         />
+        <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('email', 'required')">
+          Email is required!
+        </span>
+        <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('email', 'email')">
+          Must be a valid email address!
+        </span>
+      </div>
+    </div>
+    <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
+
+    <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-5 lg:grid-cols-2">
+      <div class="space-y-1 sm:col-span-2 lg:col-span-1">
+        <h3 class="font-semibold text-gray-900">Phone number</h3>
+        <p class="text-gray-500">For customer service</p>
+      </div>
+      <div class="sm:col-span-3 lg:col-span-1">
+        <input
+          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          id="phone"
+          formControlName="phone"
+          required
+          [ngClass]="{
+            'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
+              invalidControl('phone')
+          }"
+        />
+        <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('phone', 'required')">
+          Phone number is required!
+        </span>
       </div>
     </div>
     <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
 
     <div class="grid items-end gap-x-8 gap-y-2 sm:grid-cols-2">
-      <div class="space-y-1">
-        <h3 class="font-semibold text-gray-900">Phone number</h3>
-        <p class="text-gray-500">For customer service</p>
-      </div>
-      <div>
-        <input
-          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
-          id="phone"
-          name="phone"
-        />
-      </div>
+      <button
+        [disabled]="addCompanyForm.invalid"
+        type="submit"
+        class="flex w-full justify-center rounded-md bg-orange-500 px-4 py-2 text-white shadow-sm hover:bg-orange-400 disabled:bg-orange-300"
+      >
+        Add company
+      </button>
+      <button
+        (click)="cancel()"
+        class="flex w-full justify-center rounded-md bg-orange-500 px-4 py-2 text-white shadow-sm hover:bg-orange-400 disabled:bg-orange-300"
+      >
+        Cancel
+      </button>
     </div>
-    <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
   </form>
 </div>

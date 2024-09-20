@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { UserActions } from 'src/app/ngrx-store/user/user.actions';
 import { selectAuthError } from 'src/app/ngrx-store/user/user.selectors';
@@ -13,31 +12,32 @@ import { selectAuthError } from 'src/app/ngrx-store/user/user.selectors';
 export class LoginPageComponent {
   loginError$ = this.store.select(selectAuthError);
 
-  loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
-    rememberMe: false
-  });
-
-  get emailInvalid() {
-    return (
-      this.loginForm.get('email')?.touched ||
-      (this.loginForm.get('email')?.dirty && this.loginForm.get('email')?.invalid)
-    );
-  }
-
-  get passwordInvalid() {
-    return (
-      this.loginForm.get('password')?.touched ||
-      (this.loginForm.get('password')?.dirty && this.loginForm.get('password')?.invalid)
-    );
-  }
+  loginForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
     private store: Store
-  ) {}
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+      rememberMe: false
+    });
+  }
+
+  invalidControl(controlName: string, error?: string) {
+    const isInvalid =
+      this.loginForm.get(controlName)?.touched ||
+      (this.loginForm.get(controlName)?.dirty && this.loginForm.get(controlName)?.invalid);
+    if (error) {
+      if (error === 'any') {
+        return isInvalid && this.loginForm.get(controlName)?.errors;
+      }
+      return isInvalid && this.loginForm.get(controlName)?.hasError(error);
+    } else {
+      return isInvalid;
+    }
+  }
 
   login(): void {
     const { email, password } = this.loginForm.value;

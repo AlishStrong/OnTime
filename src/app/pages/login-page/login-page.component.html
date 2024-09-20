@@ -49,19 +49,13 @@
               class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
               [ngClass]="{
                 'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-                  emailInvalid
+                  invalidControl('email')
               }"
             />
-            <span
-              class="ml-2 mt-2 block text-red-500"
-              *ngIf="emailInvalid && loginForm.get('email')?.errors?.['required']"
-            >
+            <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('email', 'required')">
               Email is required!
             </span>
-            <span
-              class="ml-2 mt-2 block text-red-500"
-              *ngIf="emailInvalid && loginForm.get('email')?.errors?.['email']"
-            >
+            <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('email', 'email')">
               Must be a valid email address!
             </span>
           </div>
@@ -79,13 +73,10 @@
               class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
               [ngClass]="{
                 'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-                  passwordInvalid
+                  invalidControl('password')
               }"
             />
-            <span
-              class="ml-2 mt-2 block text-red-500"
-              *ngIf="passwordInvalid && loginForm.get('password')?.errors?.['required']"
-            >
+            <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('password', 'required')">
               Password is required!
             </span>
           </div>
@@ -93,7 +84,7 @@
         <div>
           <button
             type="submit"
-            [disabled]="!loginForm.valid"
+            [disabled]="loginForm.invalid"
             class="flex w-full justify-center rounded-md bg-orange-500 px-4 py-2 text-white shadow-sm hover:bg-orange-400 disabled:bg-orange-300"
           >
             Log in

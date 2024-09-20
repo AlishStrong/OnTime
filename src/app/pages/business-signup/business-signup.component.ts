@@ -17,28 +17,47 @@ export class BusinessSignupComponent implements OnDestroy {
   signupForm: FormGroup;
   passwordStatusSubscription: Subscription;
 
-  passwordContainsNumber(control: AbstractControl): { [key: string]: { value: string } } | null {
+  stringRequired(control: AbstractControl): ValidationErrors | null {
+    const requiredError = Validators.required(control);
+    if (requiredError) {
+      return { stringRequired: true };
+    } else {
+      return control.value.trim() ? null : { stringRequired: true };
+    }
+  }
+
+  passwordMinLength(length: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return control.value.trim().length >= length ? null : { passwordMinLength: true };
+    };
+  }
+
+  passwordStartsEndsWithWhiteSpace(control: AbstractControl): ValidationErrors | null {
+    return control.value.length > control.value.trim().length ? { passwordStartsEndsWithWhiteSpace: true } : null;
+  }
+
+  passwordContainsNumber(control: AbstractControl): ValidationErrors | null {
     const regex = /\d/;
     const isValid = regex.test(control.value);
-    return !isValid ? { containsNumber: { value: control.value } } : null;
+    return !isValid ? { containsNumber: true } : null;
   }
 
-  passwordContainsLowercase(control: AbstractControl): { [key: string]: { value: string } } | null {
+  passwordContainsLowercase(control: AbstractControl): ValidationErrors | null {
     const regex = /[a-z]/;
     const isValid = regex.test(control.value);
-    return !isValid ? { containsLowercase: { value: control.value } } : null;
+    return !isValid ? { containsLowercase: true } : null;
   }
 
-  passwordContainsUppercase(control: AbstractControl): { [key: string]: { value: string } } | null {
+  passwordContainsUppercase(control: AbstractControl): ValidationErrors | null {
     const regex = /[A-Z]/;
     const isValid = regex.test(control.value);
-    return !isValid ? { containsUppercase: { value: control.value } } : null;
+    return !isValid ? { containsUppercase: true } : null;
   }
 
-  passwordContainsSpecialCharacter(control: AbstractControl): { [key: string]: { value: string } } | null {
+  passwordContainsSpecialCharacter(control: AbstractControl): ValidationErrors | null {
     const regex = /[@#$%^&+=!]/;
     const isValid = regex.test(control.value);
-    return !isValid ? { containsSpecialCharacter: { value: control.value } } : null;
+    return !isValid ? { containsSpecialCharacter: true } : null;
   }
 
   passwordMatchValidator(): ValidatorFn {
@@ -55,55 +74,21 @@ export class BusinessSignupComponent implements OnDestroy {
     };
   }
 
-  get firstnameInvalid() {
-    return (
-      this.signupForm.get('firstname')?.touched ||
-      (this.signupForm.get('firstname')?.dirty && this.signupForm.get('firstname')?.invalid)
-    );
-  }
-
-  get lastnameInvalid() {
-    return (
-      this.signupForm.get('lastname')?.touched ||
-      (this.signupForm.get('lastname')?.dirty && this.signupForm.get('lastname')?.invalid)
-    );
-  }
-
-  get emailInvalid() {
-    return (
-      this.signupForm.get('email')?.touched ||
-      (this.signupForm.get('email')?.dirty && this.signupForm.get('email')?.invalid)
-    );
-  }
-
-  get passwordInvalid() {
-    return (
-      this.signupForm.get('password')?.touched ||
-      (this.signupForm.get('password')?.dirty && this.signupForm.get('password')?.invalid)
-    );
-  }
-
-  get confirmPasswordInvalid() {
-    return (
-      this.signupForm.get('confirmpassword')?.touched ||
-      (this.signupForm.get('confirmpassword')?.dirty && !this.signupForm.get('confirmpassword')?.valid)
-    );
-  }
-
   constructor(
     private fb: FormBuilder,
     private store: Store
   ) {
     this.signupForm = this.fb.group(
       {
-        firstname: ['', [Validators.required]],
-        lastname: ['', [Validators.required]],
+        firstname: ['', [this.stringRequired]],
+        lastname: ['', [this.stringRequired]],
         email: ['', [Validators.required, Validators.email]],
         password: [
           '',
           [
-            Validators.required,
-            Validators.minLength(8),
+            this.stringRequired,
+            this.passwordMinLength(8),
+            this.passwordStartsEndsWithWhiteSpace,
             this.passwordContainsNumber,
             this.passwordContainsLowercase,
             this.passwordContainsUppercase,
@@ -127,13 +112,29 @@ export class BusinessSignupComponent implements OnDestroy {
     });
   }
 
+  invalidControl(controlName: string, error?: string) {
+    const isInvalid =
+      this.signupForm.get(controlName)?.touched ||
+      (this.signupForm.get(controlName)?.dirty && this.signupForm.get(controlName)?.invalid);
+    if (error) {
+      if (error === 'any') {
+        return isInvalid && this.signupForm.get(controlName)?.errors;
+      }
+      return isInvalid && this.signupForm.get(controlName)?.hasError(error);
+    } else {
+      return isInvalid;
+    }
+  }
+
   ngOnDestroy(): void {
     this.passwordStatusSubscription.unsubscribe();
   }
 
   signup(): void {
     const { firstname, lastname, email, password } = this.signupForm.value;
-    this.store.dispatch(UserActions.signUp({ firstname, lastname, email, password }));
+    this.store.dispatch(
+      UserActions.signUp({ firstname: firstname.trim(), lastname: lastname.trim(), email, password })
+    );
   }
 
   closeAuthErrorNotification() {
@@ -141,6 +142,7 @@ export class BusinessSignupComponent implements OnDestroy {
   }
 
   cancel() {
+    this.signupForm.reset();
     this.store.dispatch(UserActions.logout());
   }
 }
