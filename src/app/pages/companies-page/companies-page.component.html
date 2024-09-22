@@ -100,28 +100,28 @@
       </div>
       <div
         id="add-company-street-address"
-        formGroupName="streetAddress"
+        formGroupName="address"
         class="grid grid-cols-2 gap-6 sm:col-span-3 lg:col-span-1"
       >
         <div class="relative col-span-2">
           <label
             for="street-name"
             class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium"
-            [ngClass]="invalidControl('streetAddress.streetName', 'any') ? 'text-red-500' : 'text-gray-900'"
+            [ngClass]="invalidControl('address.street', 'any') ? 'text-red-500' : 'text-gray-900'"
             >Street and house number</label
           >
           <input
             class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
             id="street-name"
-            formControlName="streetName"
+            formControlName="street"
             type="text"
             required
             [ngClass]="{
               'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-                invalidControl('streetAddress.streetName')
+                invalidControl('address.street')
             }"
           />
-          <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('streetAddress.streetName', 'required')">
+          <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('address.street', 'required')">
             Street and house number are required!
           </span>
         </div>
@@ -130,7 +130,7 @@
           <label
             for="city"
             class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium"
-            [ngClass]="invalidControl('streetAddress.city', 'any') ? 'text-red-500' : 'text-gray-900'"
+            [ngClass]="invalidControl('address.city', 'any') ? 'text-red-500' : 'text-gray-900'"
             >City</label
           >
           <input
@@ -140,10 +140,10 @@
             required
             [ngClass]="{
               'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-                invalidControl('streetAddress.city')
+                invalidControl('address.city')
             }"
           />
-          <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('streetAddress.city', 'required')">
+          <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('address.city', 'required')">
             City is required!
           </span>
         </div>
@@ -152,7 +152,7 @@
           <label
             for="postal-number"
             class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium"
-            [ngClass]="invalidControl('streetAddress.postalNumber', 'any') ? 'text-red-500' : 'text-gray-900'"
+            [ngClass]="invalidControl('address.postalNumber', 'any') ? 'text-red-500' : 'text-gray-900'"
             >Postal number</label
           >
           <input
@@ -162,10 +162,10 @@
             required
             [ngClass]="{
               'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-                invalidControl('streetAddress.postalNumber')
+                invalidControl('address.postalNumber')
             }"
           />
-          <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('streetAddress.postalNumber', 'required')">
+          <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('address.postalNumber', 'required')">
             Postal number is required!
           </span>
         </div>

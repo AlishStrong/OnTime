@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject } from 'rxjs';
+import { Company } from 'src/app/models/company.model';
+import { selectUID } from 'src/app/ngrx-store/user/user.selectors';
+import { collection, doc, Firestore, setDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-companies-page',
@@ -13,7 +17,11 @@ export class CompaniesPageComponent {
 
   countries: string[];
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+    private firestore: Firestore
+  ) {
     // TODO: fetch from DB
     this.countries = ['Uzbekistan', 'Finland'].sort();
 
@@ -24,8 +32,8 @@ export class CompaniesPageComponent {
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]],
-      streetAddress: this.fb.group({
-        streetName: ['', [Validators.required]],
+      address: this.fb.group({
+        street: ['', [Validators.required]],
         city: ['', [Validators.required]],
         postalNumber: ['', [Validators.required]]
       })
@@ -47,8 +55,32 @@ export class CompaniesPageComponent {
   }
 
   addCompany() {
+    const v = this.addCompanyForm.value;
+    const newCompany: Company = {
+      country: v.country,
+      legalName: v.legalName,
+      businessId: v.businessId,
+      name: v.name,
+      email: v.email,
+      phone: v.phone,
+      address: {
+        street: v.address.street,
+        city: v.address.city,
+        postalNumber: v.address.postalNumber
+      },
+      locations: [],
+      ownerUID: this.store.selectSignal(selectUID)(),
+      verified: false
+    };
+    console.log(newCompany);
+
+    setDoc(
+      doc(collection(this.firestore, 'companies'), v.legalName.trim().replaceAll(' ', '_').toLowerCase()),
+      newCompany
+    )
+      .then(() => console.log('company document was created'))
+      .catch(error => console.log('firestore error', error));
     this.addCompany$.next(false);
-    console.log(this.addCompanyForm.getRawValue());
   }
 
   cancel() {

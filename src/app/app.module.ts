@@ -20,6 +20,7 @@ import { UserReducer } from './ngrx-store/user/user.reducers';
 import { UserEffects } from './ngrx-store/user/user.effects';
 import { BusinessSignupComponent } from './pages/business-signup/business-signup.component';
 import { CompaniesPageComponent } from './pages/companies-page/companies-page.component';
+import { connectFirestoreEmulator, getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,13 @@ import { CompaniesPageComponent } from './pages/companies-page/companies-page.co
         connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
       }
       return auth;
+    }),
+    provideFirestore(() => {
+      const firestore = getFirestore();
+      if (environment.useEmulators) {
+        connectFirestoreEmulator(firestore, '127.0.0.1', 8080);
+      }
+      return firestore;
     }),
     ReactiveFormsModule
   ],
