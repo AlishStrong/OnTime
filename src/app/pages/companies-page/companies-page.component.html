@@ -4,7 +4,7 @@
     <h2 class="mt-6 text-center text-2xl font-semibold text-gray-900">No company added at the moment</h2>
     <button
       class="text-1xl rounded-md bg-orange-500 px-4 py-2 font-semibold text-white shadow-sm hover:bg-orange-400"
-      (click)="addCompany()"
+      (click)="openAddCompanyForm()"
     >
       Add Company
     </button>
@@ -28,11 +28,12 @@
       </div>
       <div class="sm:col-span-3 lg:col-span-1">
         <select
-          [ngClass]="{
-            'invalid:border-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500': invalidControl('country')
-          }"
-          required
-          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          [ngClass]="
+            invalidControl('country')
+              ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+              : 'border-gray-300 focus:border-orange-500 focus:ring-orange-500'
+          "
+          class="block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none sm:text-sm"
           formControlName="country"
           id="country"
         >
@@ -52,18 +53,21 @@
       </div>
       <div class="sm:col-span-3 lg:col-span-1">
         <input
-          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          [ngClass]="
+            invalidControl('legalName')
+              ? 'border-red-500 text-red-500 focus:border-red-500 focus:ring-red-500'
+              : 'border-gray-300 text-gray-900 focus:border-orange-500 focus:ring-orange-500'
+          "
+          class="block w-full appearance-none rounded-md border px-3 py-2 placeholder-gray-400 shadow-sm focus:outline-none sm:text-sm"
           id="legal-name"
           formControlName="legalName"
           type="text"
-          required
-          [ngClass]="{
-            'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-              invalidControl('legalName')
-          }"
         />
         <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('legalName', 'required')">
           Legal Name is required!
+        </span>
+        <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('legalName', 'alreadyExists')">
+          Legal Name is already registered in the system!
         </span>
       </div>
     </div>
@@ -76,18 +80,21 @@
       </div>
       <div class="sm:col-span-3 lg:col-span-1">
         <input
-          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          [ngClass]="
+            invalidControl('businessId')
+              ? 'border-red-500 text-red-500 focus:border-red-500 focus:ring-red-500'
+              : 'border-gray-300 text-gray-900 focus:border-orange-500 focus:ring-orange-500'
+          "
+          class="block w-full appearance-none rounded-md border px-3 py-2 placeholder-gray-400 shadow-sm focus:outline-none sm:text-sm"
           id="business-id"
           formControlName="businessId"
           type="text"
-          required
-          [ngClass]="{
-            'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-              invalidControl('businessId')
-          }"
         />
         <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('businessId', 'required')">
           Business ID is required!
+        </span>
+        <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('businessId', 'alreadyExists')">
+          Business ID is already registered in the system!
         </span>
       </div>
     </div>
@@ -107,19 +114,19 @@
           <label
             for="street-name"
             class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium"
-            [ngClass]="invalidControl('address.street', 'any') ? 'text-red-500' : 'text-gray-900'"
+            [ngClass]="invalidControl('address.street') ? 'text-red-500' : 'text-gray-900'"
             >Street and house number</label
           >
           <input
-            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+            [ngClass]="
+              invalidControl('address.street')
+                ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:border-orange-500 focus:ring-orange-500'
+            "
+            class="block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none sm:text-sm"
             id="street-name"
             formControlName="street"
             type="text"
-            required
-            [ngClass]="{
-              'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-                invalidControl('address.street')
-            }"
           />
           <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('address.street', 'required')">
             Street and house number are required!
@@ -130,18 +137,18 @@
           <label
             for="city"
             class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium"
-            [ngClass]="invalidControl('address.city', 'any') ? 'text-red-500' : 'text-gray-900'"
+            [ngClass]="invalidControl('address.city') ? 'text-red-500' : 'text-gray-900'"
             >City</label
           >
           <input
-            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+            [ngClass]="
+              invalidControl('address.city')
+                ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:border-orange-500 focus:ring-orange-500'
+            "
+            class="block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none sm:text-sm"
             id="city"
             formControlName="city"
-            required
-            [ngClass]="{
-              'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-                invalidControl('address.city')
-            }"
           />
           <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('address.city', 'required')">
             City is required!
@@ -152,18 +159,18 @@
           <label
             for="postal-number"
             class="absolute -top-3 left-2 inline-block bg-white px-1 font-medium"
-            [ngClass]="invalidControl('address.postalNumber', 'any') ? 'text-red-500' : 'text-gray-900'"
+            [ngClass]="invalidControl('address.postalNumber') ? 'text-red-500' : 'text-gray-900'"
             >Postal number</label
           >
           <input
-            class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+            [ngClass]="
+              invalidControl('address.postalNumber')
+                ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:border-orange-500 focus:ring-orange-500'
+            "
+            class="block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none sm:text-sm"
             id="postal-number"
             formControlName="postalNumber"
-            required
-            [ngClass]="{
-              'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-                invalidControl('address.postalNumber')
-            }"
           />
           <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('address.postalNumber', 'required')">
             Postal number is required!
@@ -180,14 +187,14 @@
       </div>
       <div class="sm:col-span-3 lg:col-span-1">
         <input
-          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          [ngClass]="
+            invalidControl('name')
+              ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+              : 'border-gray-300 focus:border-orange-500 focus:ring-orange-500'
+          "
+          class="block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none sm:text-sm"
           id="name"
           formControlName="name"
-          required
-          [ngClass]="{
-            'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-              invalidControl('name')
-          }"
         />
         <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('name', 'required')">
           Company Name is required!
@@ -203,14 +210,14 @@
       </div>
       <div class="sm:col-span-3 lg:col-span-1">
         <input
-          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          [ngClass]="
+            invalidControl('email')
+              ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+              : 'border-gray-300 focus:border-orange-500 focus:ring-orange-500'
+          "
+          class="block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none sm:text-sm"
           id="email"
           formControlName="email"
-          required
-          [ngClass]="{
-            'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-              invalidControl('email')
-          }"
         />
         <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('email', 'required')">
           Email is required!
@@ -229,14 +236,14 @@
       </div>
       <div class="sm:col-span-3 lg:col-span-1">
         <input
-          class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+          [ngClass]="
+            invalidControl('phone')
+              ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+              : 'border-gray-300 focus:border-orange-500 focus:ring-orange-500'
+          "
+          class="block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none sm:text-sm"
           id="phone"
           formControlName="phone"
-          required
-          [ngClass]="{
-            'invalid:border-red-500 invalid:text-red-500 focus:invalid:border-red-500 focus:invalid:ring-red-500':
-              invalidControl('phone')
-          }"
         />
         <span class="ml-2 mt-2 block text-red-500" *ngIf="invalidControl('phone', 'required')">
           Phone number is required!
@@ -254,6 +261,7 @@
         Add company
       </button>
       <button
+        type="button"
         (click)="cancel()"
         class="flex w-full justify-center rounded-md bg-orange-500 px-4 py-2 text-white shadow-sm hover:bg-orange-400 disabled:bg-orange-300"
       >
@@ -261,4 +269,72 @@
       </button>
     </div>
   </form>
+
+  <!-- notification modal -->
+  <div
+    class="fixed inset-0 bg-black bg-opacity-50"
+    *ngIf="notify$ | async as notify"
+    [ngClass]="notify ? 'flex items-center justify-center' : 'hidden'"
+  >
+    <div
+      [id]="'notify-' + notify.type"
+      class="flex max-w-max items-center gap-3 rounded-md p-4"
+      [ngClass]="notify.type === 'error' ? 'bg-red-50' : 'bg-green-50'"
+    >
+      <div id="icon">
+        <svg
+          *ngIf="notify.type === 'error'"
+          class="h-6 w-6 text-red-400"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <svg
+          *ngIf="notify.type === 'success'"
+          class="h-6 w-6 text-green-400"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <div id="message">
+        <p class="text-sm font-medium" [ngClass]="notify.type === 'error' ? 'text-red-800' : 'text-green-800'">
+          {{ notify.message }}
+        </p>
+      </div>
+      <div id="dismiss" class="ml-3">
+        <div class="-mx-1.5 -my-1.5">
+          <button
+            type="button"
+            class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2"
+            [ngClass]="
+              notify.type === 'error'
+                ? 'bg-red-50 text-red-500 hover:bg-red-100 focus:ring-red-600 focus:ring-offset-red-50'
+                : 'bg-green-50 text-green-500 hover:bg-green-100 focus:ring-green-600 focus:ring-offset-green-50'
+            "
+            (click)="closeNotification(notify.type)"
+          >
+            <span class="sr-only">Dismiss</span>
+            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path
+                d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

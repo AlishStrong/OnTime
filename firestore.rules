@@ -3,13 +3,9 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    function newCompany() {
-      return request.resource != null && 
-      			 resource == null;
-    }
-
     match /companies/{company} {
-      allow create: if request.auth != null && newCompany();
+      allow create: if request.auth != null && request.resource != null;
+      allow list: if request.auth != null;
     }
   }
 }

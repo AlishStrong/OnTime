@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject } from 'rxjs';
 import { Company } from 'src/app/models/company.model';
 import { selectUID } from 'src/app/ngrx-store/user/user.selectors';
-import { collection, doc, Firestore, setDoc } from '@angular/fire/firestore';
+import { collection, doc, Firestore, setDoc, query, where, or, getDocs, and } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-companies-page',
@@ -12,7 +12,10 @@ import { collection, doc, Firestore, setDoc } from '@angular/fire/firestore';
   styleUrls: ['./companies-page.component.css']
 })
 export class CompaniesPageComponent {
-  addCompany$ = new BehaviorSubject<boolean>(false);
+  private companiesColRef;
+
+  notify$ = new BehaviorSubject<{ type: 'success' | 'error'; message: string } | null>(null);
+  addCompany$ = new BehaviorSubject<boolean>(true);
   addCompanyForm: FormGroup;
 
   countries: string[];
@@ -22,6 +25,8 @@ export class CompaniesPageComponent {
     private store: Store,
     private firestore: Firestore
   ) {
+    this.companiesColRef = collection(this.firestore, 'companies');
+
     // TODO: fetch from DB
     this.countries = ['Uzbekistan', 'Finland'].sort();
 
@@ -42,16 +47,17 @@ export class CompaniesPageComponent {
 
   invalidControl(controlName: string, error?: string) {
     const isInvalid =
-      this.addCompanyForm.get(controlName)?.touched ||
+      (this.addCompanyForm.get(controlName)?.touched && this.addCompanyForm.get(controlName)?.invalid) ||
       (this.addCompanyForm.get(controlName)?.dirty && this.addCompanyForm.get(controlName)?.invalid);
     if (error) {
-      if (error === 'any') {
-        return isInvalid && this.addCompanyForm.get(controlName)?.errors;
-      }
       return isInvalid && this.addCompanyForm.get(controlName)?.hasError(error);
     } else {
       return isInvalid;
     }
+  }
+
+  openAddCompanyForm() {
+    this.addCompany$.next(false);
   }
 
   addCompany() {
@@ -72,19 +78,73 @@ export class CompaniesPageComponent {
       ownerUID: this.store.selectSignal(selectUID)(),
       verified: false
     };
-    console.log(newCompany);
 
-    setDoc(
-      doc(collection(this.firestore, 'companies'), v.legalName.trim().replaceAll(' ', '_').toLowerCase()),
-      newCompany
-    )
-      .then(() => console.log('company document was created'))
-      .catch(error => console.log('firestore error', error));
-    this.addCompany$.next(false);
+    this.isCompanyNew(newCompany.country, newCompany.legalName, newCompany.businessId)
+      .then(_ => {
+        const companyDocPath = `${v.legalName.trim().replaceAll(' ', '_').toLowerCase()}_${v.businessId.trim()}`;
+        return setDoc(doc(this.companiesColRef, companyDocPath), newCompany);
+      })
+      .then(() => {
+        this.notify$.next({
+          type: 'success',
+          message: `Company ${v.legalName} has been added! It will be verified soon by OnTime team!`
+        });
+        setTimeout(() => this.closeNotification('success'), 5000);
+      })
+      .catch(error => {
+        if (error.message.includes('has already been registered in OnTime system!')) {
+          this.notify$.next({
+            type: 'error',
+            message: error.message
+          });
+        } else {
+          this.notify$.next({
+            type: 'error',
+            message: 'System issue has occured during registration of your company. Please try again later!'
+          });
+        }
+      });
+  }
+
+  private isCompanyNew(country: string, legalName: string, businessId: string): Promise<boolean> {
+    let message = '';
+
+    const q = query(
+      this.companiesColRef,
+      and(
+        where('country', '==', country),
+        or(where('legalName', '==', legalName), where('businessId', '==', businessId))
+      )
+    );
+
+    return getDocs(q).then(querySnapshot => {
+      if (querySnapshot.empty) {
+        return true;
+      } else {
+        querySnapshot.forEach(qds => {
+          if (qds.get('legalName') === legalName) {
+            this.addCompanyForm.get('legalName')?.setErrors({ alreadyExists: true });
+          }
+          if (qds.get('businessId') === businessId) {
+            this.addCompanyForm.get('businessId')?.setErrors({ alreadyExists: true });
+          }
+        });
+        message = `Company ${legalName} with Business ID: ${businessId} in ${country} has already been registered in OnTime system!`;
+        throw new Error(message);
+      }
+    });
   }
 
   cancel() {
     this.addCompanyForm.reset();
     this.addCompany$.next(true);
+  }
+
+  closeNotification(type?: 'success' | 'error') {
+    this.notify$.next(null);
+    if (type === 'success') {
+      this.addCompanyForm.reset();
+      this.addCompany$.next(true);
+    }
   }
 }
