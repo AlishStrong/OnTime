@@ -21,6 +21,7 @@ import { UserEffects } from './ngrx-store/user/user.effects';
 import { BusinessSignupComponent } from './pages/business-signup/business-signup.component';
 import { CompaniesPageComponent } from './pages/companies-page/companies-page.component';
 import { connectFirestoreEmulator, getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { NotificationReducer } from './ngrx-store/notification/notification.reducer';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { connectFirestoreEmulator, getFirestore, provideFirestore } from '@angul
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({ user: UserReducer, router: routerReducer }),
+    StoreModule.forRoot({ user: UserReducer, router: routerReducer, notification: NotificationReducer }),
     EffectsModule.forRoot([UserEffects]),
     StoreRouterConnectingModule.forRoot(),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),

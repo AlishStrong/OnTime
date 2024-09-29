@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Company } from 'src/app/models/company.model';
 import { selectUID } from 'src/app/ngrx-store/user/user.selectors';
 import { collection, doc, Firestore, setDoc, query, where, or, getDocs, and } from '@angular/fire/firestore';
+import { NotificationActions } from 'src/app/ngrx-store/notification/notification.actions';
 
 @Component({
   selector: 'app-companies-page',
@@ -14,10 +15,9 @@ import { collection, doc, Firestore, setDoc, query, where, or, getDocs, and } fr
 export class CompaniesPageComponent {
   private companiesColRef;
 
-  notify$ = new BehaviorSubject<{ type: 'success' | 'error'; message: string } | null>(null);
   addCompany$ = new BehaviorSubject<boolean>(true);
-  addCompanyForm: FormGroup;
 
+  addCompanyForm: FormGroup;
   countries: string[];
 
   constructor(
@@ -85,23 +85,33 @@ export class CompaniesPageComponent {
         return setDoc(doc(this.companiesColRef, companyDocPath), newCompany);
       })
       .then(() => {
-        this.notify$.next({
-          type: 'success',
-          message: `Company ${v.legalName} has been added! It will be verified soon by OnTime team!`
-        });
-        setTimeout(() => this.closeNotification('success'), 5000);
+        this.store.dispatch(
+          NotificationActions.setNotification({
+            status: 'success',
+            message: `Company ${v.legalName} has been added! It will be verified soon by OnTime team!`
+          })
+        );
+        setTimeout(() => {
+          this.store.dispatch(NotificationActions.clearNotification());
+          this.addCompanyForm.reset();
+          this.addCompany$.next(true);
+        }, 5000);
       })
       .catch(error => {
         if (error.message.includes('has already been registered in OnTime system!')) {
-          this.notify$.next({
-            type: 'error',
-            message: error.message
-          });
+          this.store.dispatch(
+            NotificationActions.setNotification({
+              status: 'error',
+              message: error.message
+            })
+          );
         } else {
-          this.notify$.next({
-            type: 'error',
-            message: 'System issue has occured during registration of your company. Please try again later!'
-          });
+          this.store.dispatch(
+            NotificationActions.setNotification({
+              status: 'error',
+              message: 'System issue has occured during registration of your company. Please try again later!'
+            })
+          );
         }
       });
   }
@@ -129,7 +139,9 @@ export class CompaniesPageComponent {
             this.addCompanyForm.get('businessId')?.setErrors({ alreadyExists: true });
           }
         });
-        message = `Company ${legalName} with Business ID: ${businessId} in ${country} has already been registered in OnTime system!`;
+        message = `Company ${this.addCompanyForm.get('legalName')?.hasError('alreadyExists') ? legalName : ''}${
+          this.addCompanyForm.get('businessId')?.hasError('alreadyExists') ? ' with Business ID: ' + businessId : ''
+        } in ${country} has already been registered in OnTime system!`;
         throw new Error(message);
       }
     });
@@ -138,13 +150,5 @@ export class CompaniesPageComponent {
   cancel() {
     this.addCompanyForm.reset();
     this.addCompany$.next(true);
-  }
-
-  closeNotification(type?: 'success' | 'error') {
-    this.notify$.next(null);
-    if (type === 'success') {
-      this.addCompanyForm.reset();
-      this.addCompany$.next(true);
-    }
   }
 }
