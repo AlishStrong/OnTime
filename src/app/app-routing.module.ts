@@ -8,26 +8,29 @@ import { BusinessSignupComponent } from './pages/business-signup/business-signup
 import { CompaniesPageComponent } from './pages/companies-page/companies-page.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
-const redirectLoggedInToHome = () => redirectLoggedInTo(['business-home']);
+const redirectLoggedInToBusinessHome = () => redirectLoggedInTo(['business-home']);
+
+// don't commit the line below
+// const redirectLoggedInToBusinessHome = () => redirectLoggedInTo(['companies']);
 
 const routes: Routes = [
   {
     path: '',
     component: LandingPageComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectLoggedInToHome }
+    data: { authGuardPipe: redirectLoggedInToBusinessHome }
   },
   {
     path: 'login',
     component: LoginPageComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectLoggedInToHome }
+    data: { authGuardPipe: redirectLoggedInToBusinessHome }
   },
   {
     path: 'signup',
     component: BusinessSignupComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectLoggedInToHome }
+    data: { authGuardPipe: redirectLoggedInToBusinessHome }
   },
   {
     path: 'business-home',

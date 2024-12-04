@@ -5,6 +5,8 @@ import { Company } from 'src/app/models/company.model';
 import { selectUID } from 'src/app/ngrx-store/user/user.selectors';
 import { collection, doc, Firestore, setDoc, query, where, or, getDocs, and } from '@angular/fire/firestore';
 import { NotificationActions } from 'src/app/ngrx-store/notification/notification.actions';
+import { CompanyService } from 'src/app/services/company/company.service';
+import { Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-companies-page',
@@ -18,10 +20,14 @@ export class CompaniesPageComponent {
   addCompanyForm: FormGroup;
   countries: string[];
 
+  companies$: Observable<Company[]>;
+  noCompanies = true;
+
   constructor(
     private fb: FormBuilder,
     private store: Store,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private companyService: CompanyService
   ) {
     this.companiesColRef = collection(this.firestore, 'companies');
 
@@ -41,6 +47,12 @@ export class CompaniesPageComponent {
         postalNumber: ['', [Validators.required]]
       })
     });
+
+    this.companies$ = this.companyService.getUserCompanies().pipe(
+      tap(cs => {
+        this.noCompanies = cs.length <= 0;
+      })
+    );
   }
 
   invalidControl(controlName: string, error?: string) {

@@ -1,4 +1,9 @@
 <div id="companies-page" class="mx-auto max-w-5xl">
+  <!-- companies list section -->
+  <div *ngFor="let c of companies$ | async">
+    <p>Company name {{ c.name }}</p>
+  </div>
+
   <!-- add company section -->
   <div id="add-company-section" class="flex justify-center" *ngIf="!showAddCompanyForm()">
     <div
@@ -22,7 +27,7 @@
           />
         </svg>
       </div>
-      <div id="add-company-text">
+      <div id="add-company-text" *ngIf="noCompanies">
         <h3 class="mt-2 text-sm font-semibold text-gray-900 sm:mt-1 sm:text-left">No company added at the moment</h3>
         <p class="mt-1 text-sm text-gray-500">Register a company using this button</p>
       </div>
