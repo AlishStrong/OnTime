@@ -142,7 +142,6 @@ export class BusinessSignupComponent implements OnDestroy {
   }
 
   cancel() {
-    this.signupForm.reset();
     this.store.dispatch(UserActions.logout());
   }
 }

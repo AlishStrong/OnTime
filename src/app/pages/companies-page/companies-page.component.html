@@ -1,13 +1,46 @@
 <div id="companies-page" class="mx-auto max-w-5xl">
-  <!-- add company button -->
-  <div class="flex flex-col items-center gap-3 sm:mx-auto sm:w-full sm:max-w-md" *ngIf="addCompany$ | async">
-    <h2 class="mt-6 text-center text-2xl font-semibold text-gray-900">No company added at the moment</h2>
-    <button
-      class="text-1xl rounded-md bg-orange-500 px-4 py-2 font-semibold text-white shadow-sm hover:bg-orange-400"
-      (click)="openAddCompanyForm()"
+  <!-- add company section -->
+  <div id="add-company-section" class="flex justify-center" *ngIf="!showAddCompanyForm()">
+    <div
+      id="add-company-section-border"
+      class="flex max-w-max flex-col items-center rounded-lg border-2 border-dashed border-gray-300 px-10 py-6 text-center sm:flex-row sm:gap-6"
     >
-      Add Company
-    </button>
+      <div id="add-company-icon">
+        <svg
+          class="mx-auto h-12 w-12 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            vector-effect="non-scaling-stroke"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z"
+          />
+        </svg>
+      </div>
+      <div id="add-company-text">
+        <h3 class="mt-2 text-sm font-semibold text-gray-900 sm:mt-1 sm:text-left">No company added at the moment</h3>
+        <p class="mt-1 text-sm text-gray-500">Register a company using this button</p>
+      </div>
+      <div id="add-company-button" class="mt-6 sm:mt-0">
+        <button
+          type="button"
+          (click)="startAddCompany()"
+          class="inline-flex items-center rounded-md bg-orange-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
+        >
+          <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path
+              d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
+            />
+          </svg>
+          Add Company
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- company form -->
@@ -16,7 +49,7 @@
     [formGroup]="addCompanyForm"
     (ngSubmit)="addCompany()"
     class="mx-auto"
-    *ngIf="(addCompany$ | async) === false"
+    *ngIf="showAddCompanyForm()"
   >
     <h2 class="text-2xl font-semibold text-gray-900">Add a new Company</h2>
     <hr role="presentation" class="my-10 mt-6 w-full border-t border-gray-300" />
@@ -262,7 +295,7 @@
       </button>
       <button
         type="button"
-        (click)="cancel()"
+        (click)="cancelAddCompany()"
         class="flex w-full justify-center rounded-md bg-orange-500 px-4 py-2 text-white shadow-sm hover:bg-orange-400 disabled:bg-orange-300"
       >
         Cancel

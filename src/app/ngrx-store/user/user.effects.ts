@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserActions } from './user.actions';
 import { map, catchError, exhaustMap, tap, switchMap } from 'rxjs/operators';
 import { FirebaseError } from '@firebase/util';

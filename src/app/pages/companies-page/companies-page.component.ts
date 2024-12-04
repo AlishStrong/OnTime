@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject } from 'rxjs';
 import { Company } from 'src/app/models/company.model';
 import { selectUID } from 'src/app/ngrx-store/user/user.selectors';
 import { collection, doc, Firestore, setDoc, query, where, or, getDocs, and } from '@angular/fire/firestore';
@@ -15,8 +14,7 @@ import { NotificationActions } from 'src/app/ngrx-store/notification/notificatio
 export class CompaniesPageComponent {
   private companiesColRef;
 
-  addCompany$ = new BehaviorSubject<boolean>(true);
-
+  showAddCompanyForm = signal(false);
   addCompanyForm: FormGroup;
   countries: string[];
 
@@ -56,8 +54,13 @@ export class CompaniesPageComponent {
     }
   }
 
-  openAddCompanyForm() {
-    this.addCompany$.next(false);
+  startAddCompany() {
+    this.showAddCompanyForm.set(true);
+  }
+
+  cancelAddCompany() {
+    this.showAddCompanyForm.set(false);
+    this.addCompanyForm.reset();
   }
 
   addCompany() {
@@ -94,7 +97,6 @@ export class CompaniesPageComponent {
         setTimeout(() => {
           this.store.dispatch(NotificationActions.clearNotification());
           this.addCompanyForm.reset();
-          this.addCompany$.next(true);
         }, 5000);
       })
       .catch(error => {
@@ -145,10 +147,5 @@ export class CompaniesPageComponent {
         throw new Error(message);
       }
     });
-  }
-
-  cancel() {
-    this.addCompanyForm.reset();
-    this.addCompany$.next(true);
   }
 }
